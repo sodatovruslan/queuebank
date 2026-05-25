@@ -16,4 +16,18 @@ def register(request):
         return redirect('login')
     return render(request, 'accounts/register.html')
 
+
+from django.contrib.auth import login, logout, authenticate
+
+def login_view(request):
+    if request.method == "POST":
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user:
+            login(request, user)
+            return redirect('home')
+    return render(request, 'accounts/login.html')
+
+
 # Create your views here.
