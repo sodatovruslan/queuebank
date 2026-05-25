@@ -53,5 +53,13 @@ def done_ticket(request, pk):
     return redirect('operator_panel')
 
 
+@login_required
+@permission_required('tickets.change_ticket', raise_exception=True)
+def skip_ticket(request, pk):
+    ticket = Ticket.objects.get(pk=pk)
+    ticket.status = 'cancelled'
+    ticket.save()
+    return redirect('operator_panel')
+
 
 # Create your views here.
