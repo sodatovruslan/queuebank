@@ -25,3 +25,22 @@ def operator_panel(request):
     })
 
 
+@login_required
+@permission_required('tickets.change_ticket', raise_exception=True)
+def next_client(request):
+    operator = Operator.objects.get(user=request.user)
+    window = Window.objects.get(operator=operator)
+    
+    next_ticket = Ticket.objects.filter(
+        service=window.service,
+        status='waiting'
+    ).first()
+    
+    if next_ticket:
+        next_ticket.status = 'called'
+        next_ticket.window = window
+        next_ticket.save()
+
+    return redirect('operator_panel')
+
+
