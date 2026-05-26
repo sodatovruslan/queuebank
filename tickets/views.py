@@ -20,4 +20,22 @@ def take_ticket(request, pk):
         status='waiting'
     )
     return redirect('my_ticket')
+
+
+@login_required
+@permission_required('tickets.view_ticket', raise_exception=True)
+def my_ticket(request):
+    ticket = Ticket.objects.filter(
+        client=request.user
+    ).last()
+
+    position = Ticket.objects.filter(
+        service=ticket.service,
+        status='waiting'
+    ).count()
+
+    return render(request, 'tickets/my_ticket.html', {
+        'ticket': ticket,
+        'position': position
+    })
 # Create your views here.
