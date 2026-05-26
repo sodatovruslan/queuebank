@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>My Ticket</h2>
+{% if ticket %}
+    <h3>Ticket Number: {{ ticket.number }}</h3>
+    <p>Service: {{ ticket.service.name }}</p>
+    <p>Status: {{ ticket.get_status_display }}</p>
+    <p>People ahead: {{ position }}</p>
+    <meta http-equiv="refresh" content="10">
+{% else %}
+    <h3>You have no active ticket!</h3>
+    <a href="{% url 'home' %}">Take a ticket</a>
+{% endif %}
+
+{% endblock %}
