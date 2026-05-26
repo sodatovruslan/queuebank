@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Welcome to QueueBank</h2>
+<h3>Choose a service</h3>
+{% for service in services %}
+    <div>
+        <h4>{{ service.name }}</h4>
+        <p>{{ service.description }}</p>
+        <a href="{% url 'take_ticket' service.pk %}">Take Ticket</a>
+    </div>
+{% endfor %}
+{% endblock %}
