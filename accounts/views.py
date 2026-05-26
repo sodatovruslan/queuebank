@@ -3,9 +3,8 @@ from django.contrib.auth.models import User
 from .models import Client
 from django.contrib.auth import login, logout, authenticate
 
-
 def register(request):
-    if request.method == "POST":
+    if request.method=="POST":
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -35,8 +34,6 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('login')
-
-
 
 
 
