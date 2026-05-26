@@ -80,4 +80,18 @@ def confirm_email(request):
         return redirect('login')
     return render(request, 'accounts/confirm_email.html')
 
+
+
+def forgot_password(request):
+    if request.method == 'POST':
+        email = request.POST.get('email').strip()
+        user = User.objects.filter(email=email).first()
+        if not user:
+            return render(request, 'accounts/forgot_password.html', {'error': 'Email not found'})
+        send_confirmation_email(user)
+        return redirect('reset_confirm')
+    return render(request, 'accounts/forgot_password.html')
+
+
+
 # Create your views here.
