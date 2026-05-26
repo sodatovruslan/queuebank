@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,permission_required
 from .models import Service, Ticket, Window
 
 def home(request):
@@ -8,6 +8,7 @@ def home(request):
 
 
 @login_required
+@permission_required('tickets.add_ticket', raise_exception=True)
 def take_ticket(request, pk):
     service = Service.objects.get(pk=pk)
     count = Ticket.objects.filter(service=service).count()
