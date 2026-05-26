@@ -39,7 +39,7 @@ class Ticket(models.Model):
     served_at=models.DateTimeField(null=True, blank=True)
     client=models.ForeignKey(User, on_delete=models.CASCADE)
     service=models.ForeignKey(Service, on_delete=models.CASCADE)
-    window=models.ForeignKey(Window, on_delete=models.CASCADE)
+    window = models.ForeignKey(Window, on_delete=models.CASCADE, null=True, blank=True)
 
     def __str__(self):
         return f"{self.number} - {self.status}"
