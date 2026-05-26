@@ -19,17 +19,23 @@ def send_confirmation_email(user):
         print(e, 'error')
 
 def register(request):
-    if request.method=="POST":
+    if request.method == 'POST':
         username = request.POST.get('username')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
         email = request.POST.get('email')
-        password = request.POST.get('password')
-        user = User.objects.create_user(
-            username=username,
-            email=email,
-            password=password
-        )
+        if password1 != password2:
+            return render(request, 'accounts/register.html', {'error': 'Password dont match'})
+        elif User.objects.filter(username=username).exists():
+            return render(request, 'accounts/register.html', {'error': 'User already exist'})
+        elif User.objects.filter(email=email).exists():
+            return render(request, 'accounts/register.html', {'error': 'Email already exist'})
+        user = User.objects.create_user(username=username, email=email, password=password1)
+        user.is_active = False
+        user.save()
         Client.objects.create(user=user, full_name=username, phone='')
-        return redirect('login')
+        send_confirmation_email(user)
+        return render(request, 'accounts/confirm_email.html', {'username': user.username})
     return render(request, 'accounts/register.html')
 
 
