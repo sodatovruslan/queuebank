@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Confirm Email</h2>
+{% if error %}
+    <p>{{ error }}</p>
+{% endif %}
+<form method="POST">
+    {% csrf_token %}
+    <input type="hidden" name="username" value="{{ username }}">
+    <input type="text" name="code" placeholder="Enter your code">
+    <button type="submit">Confirm</button>
+</form>
+{% endblock %}
