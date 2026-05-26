@@ -1,7 +1,22 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from .models import Client
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import authenticate, login, logout
+from random import randint
+from django.core.mail import send_mail
+from .models import EmailConfirm, Client
+from django.conf import settings
+
+def send_confirmation_email(user):
+    code = randint(100000, 999999)
+    EmailConfirm.objects.update_or_create(user=user, defaults={'code': code})
+    try:
+        send_mail(
+            subject='Confirm ur Password',
+            message=f'Hello {user.username}, your code is {code}',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[user.email])
+    except Exception as e:
+        print(e, 'error')
 
 def register(request):
     if request.method=="POST":
