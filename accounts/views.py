@@ -93,5 +93,17 @@ def forgot_password(request):
     return render(request, 'accounts/forgot_password.html')
 
 
-
+def reset_confirm(request):
+    if request.method=='POST':
+        code=request.POST.get('code').strip()
+        new_password=request.POST.get('new_password')
+        confirm=EmailConfirm.objects.filter(code=code).first()
+        if not confirm:
+            return render(request, 'accounts/reset_confirm.html', {'error': 'Wrong code'})
+        user=confirm.user
+        user.set_password(new_password)
+        user.save()
+        confirm.delete()
+        return redirect('login')
+    return render(request, 'accounts/reset_confirm.html')
 # Create your views here.
