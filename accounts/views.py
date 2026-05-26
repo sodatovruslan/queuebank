@@ -26,10 +26,14 @@ def register(request):
         email = request.POST.get('email')
         if password1 != password2:
             return render(request, 'accounts/register.html', {'error': 'Password dont match'})
-        elif User.objects.filter(username=username).exists():
+        elif User.objects.filter(username=username, is_active=True).exists():
             return render(request, 'accounts/register.html', {'error': 'User already exist'})
-        elif User.objects.filter(email=email).exists():
+        elif User.objects.filter(email=email, is_active=True).exists():
             return render(request, 'accounts/register.html', {'error': 'Email already exist'})
+        
+        # Удаляем старого неактивного юзера если есть
+        User.objects.filter(username=username, is_active=False).delete()
+        
         user = User.objects.create_user(username=username, email=email, password=password1)
         user.is_active = False
         user.save()
