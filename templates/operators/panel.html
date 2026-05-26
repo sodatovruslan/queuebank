@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Operator Panel</h2>
+<h3>Window №{{ window.number }}</h3>
+<h4>Service: {{ window.service.name }}</h4>
+
+<hr>
+
+<h3>Current Client:</h3>
+{% if current_ticket %}
+    <h2>{{ current_ticket.number }}</h2>
+    <p>Service: {{ current_ticket.service.name }}</p>
+    <form method="POST" action="{% url 'done_ticket' current_ticket.pk %}">
+        {% csrf_token %}
+        <button type="submit">Done</button>
+    </form>
+    <form method="POST" action="{% url 'skip_ticket' current_ticket.pk %}">
+        {% csrf_token %}
+        <button type="submit">Skip</button>
+    </form>
+{% else %}
+    <p>No current client</p>
+{% endif %}
+
+<hr>
+
+<h3>Queue:</h3>
+{% for ticket in queue %}
+    <p>{{ ticket.number }} - {{ ticket.service.name }}</p>
+{% endfor %}
+
+<form method="POST" action="{% url 'next_client' %}">
+    {% csrf_token %}
+    <button type="submit">Next Client</button>
+</form>
+
+<meta http-equiv="refresh" content="10">
+
+{% endblock %}
