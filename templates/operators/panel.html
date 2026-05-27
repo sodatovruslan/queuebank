@@ -1,41 +1,46 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container">
+    <h2>Operator Panel</h2>
+    <h3>Window №{{ window.number }} — {{ window.service.name }}</h3>
 
-<h2>Operator Panel</h2>
-<h3>Window №{{ window.number }}</h3>
-<h4>Service: {{ window.service.name }}</h4>
+    <div class="current-client">
+        <h3>Current Client</h3>
+        {% if current_ticket %}
+            <div class="current-number">{{ current_ticket.number }}</div>
+            <p>Service: {{ current_ticket.service.name }}</p>
+            <br>
+            <form method="POST" action="{% url 'done_ticket' current_ticket.pk %}" style="display:inline">
+                {% csrf_token %}
+                <button class="btn btn-done">✅ Done</button>
+            </form>
+            <form method="POST" action="{% url 'skip_ticket' current_ticket.pk %}" style="display:inline">
+                {% csrf_token %}
+                <button class="btn btn-skip">❌ Skip</button>
+            </form>
+        {% else %}
+            <p>No current client</p>
+        {% endif %}
+    </div>
 
-<hr>
+    <div class="card">
+        <h3>Queue</h3>
+        {% for ticket in queue %}
+            <div class="queue-item">
+                <span>{{ ticket.number }}</span>
+                <span>{{ ticket.service.name }}</span>
+            </div>
+        {% empty %}
+            <p>Queue is empty</p>
+        {% endfor %}
+    </div>
 
-<h3>Current Client:</h3>
-{% if current_ticket %}
-    <h2>{{ current_ticket.number }}</h2>
-    <p>Service: {{ current_ticket.service.name }}</p>
-    <form method="POST" action="{% url 'done_ticket' current_ticket.pk %}">
+    <form method="POST" action="{% url 'next_client' %}">
         {% csrf_token %}
-        <button type="submit">Done</button>
+        <button class="btn">➡️ Next Client</button>
     </form>
-    <form method="POST" action="{% url 'skip_ticket' current_ticket.pk %}">
-        {% csrf_token %}
-        <button type="submit">Skip</button>
-    </form>
-{% else %}
-    <p>No current client</p>
-{% endif %}
 
-<hr>
-
-<h3>Queue:</h3>
-{% for ticket in queue %}
-    <p>{{ ticket.number }} - {{ ticket.service.name }}</p>
-{% endfor %}
-
-<form method="POST" action="{% url 'next_client' %}">
-    {% csrf_token %}
-    <button type="submit">Next Client</button>
-</form>
-
-<meta http-equiv="refresh" content="10">
-
+    <meta http-equiv="refresh" content="10">
+</div>
 {% endblock %}
