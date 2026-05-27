@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>AI Assistant</h2>
+<p>Ask me anything about our bank services!</p>
+
+<form method="GET">
+    <input type="text" name="prompt" value="{{ prompt }}" placeholder="Ask me something...">
+    <button type="submit">Ask</button>
+</form>
+
+{% if answer %}
+    <h3>Answer:</h3>
+    <p>{{ answer }}</p>
+{% endif %}
+
+{% endblock %}
