@@ -31,12 +31,13 @@ def ai_help(request):
     answer = ''
     if prompt:
         response = client.chat.completions.create(
-            messages=[
-                {"role": "system", "content": PROMPT_FOR_AI},
-                {"role": "user", "content": prompt}
-            ],
-            model="llama3-8b-8192",
-        )
+    messages=[
+        {"role": "system", "content": PROMPT_FOR_AI},
+        {"role": "user", "content": prompt}
+    ],
+    model="llama-3.3-70b-versatile",
+)
+        
         answer = response.choices[0].message.content
     
     return render(request, 'tickets/ai_help.html', {
