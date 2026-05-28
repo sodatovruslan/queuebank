@@ -83,4 +83,14 @@ def my_ticket(request):
         'ticket': ticket,
         'position': position
     })
+
+
+@login_required
+@permission_required('tickets.change_ticket', raise_exception=True)
+def cancel_ticket(request, pk):
+    ticket = Ticket.objects.get(pk=pk)
+    if ticket.client == request.user:
+        ticket.status = 'cancelled'
+        ticket.save()
+    return redirect('my_ticket')
 # Create your views here.
