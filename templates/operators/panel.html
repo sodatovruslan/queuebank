@@ -5,6 +5,16 @@
     <h2>Operator Panel</h2>
     <h3>Window №{{ window.number }} — {{ window.service.name }}</h3>
 
+    <form method="POST" action="{% url 'toggle_window' %}">
+        {% csrf_token %}
+        {% if window.is_open %}
+            <button class="btn btn-skip">🔴 Close Window</button>
+        {% else %}
+            <button class="btn btn-done">🟢 Open Window</button>
+        {% endif %}
+    </form>
+    <br>
+
     <div class="current-client">
         <h3>Current Client</h3>
         {% if current_ticket %}
