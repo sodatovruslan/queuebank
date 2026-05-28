@@ -62,4 +62,16 @@ def skip_ticket(request, pk):
     return redirect('operator_panel')
 
 
+@login_required
+@permission_required('tickets.change_window', raise_exception=True)
+def toggle_window(request):
+    operator = Operator.objects.get(user=request.user)
+    window = Window.objects.get(operator=operator)
+    if window.is_open:
+        window.is_open = False
+    else:
+        window.is_open = True
+    window.save()
+    return redirect('operator_panel')
+
 # Create your views here.
