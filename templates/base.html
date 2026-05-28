@@ -17,6 +17,7 @@
                 <a href="{% url 'operator_panel' %}">Operator Panel</a>
             {% else %}
                 <a href="{% url 'my_ticket' %}">My Ticket</a>
+                <a href="{% url 'ticket_history' %}">History</a>
             {% endif %}
             {% if user.is_superuser %}
                 <a href="{% url 'dashboard' %}">Dashboard</a>
