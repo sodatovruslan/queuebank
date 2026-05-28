@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'accounts',
     'tickets',
     'operators',
+	'dashboard',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
