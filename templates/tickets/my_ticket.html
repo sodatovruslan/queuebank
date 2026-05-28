@@ -9,6 +9,13 @@
         <p>Service: {{ ticket.service.name }}</p>
         <p class="status-{{ ticket.status }}">Status: {{ ticket.get_status_display }}</p>
         <p>People ahead: {{ position }}</p>
+        <br>
+        {% if ticket.status == 'waiting' %}
+        <form method="POST" action="{% url 'cancel_ticket' ticket.pk %}">
+            {% csrf_token %}
+            <button class="btn btn-skip">❌ Cancel Ticket</button>
+        </form>
+        {% endif %}
         <meta http-equiv="refresh" content="10">
     </div>
     {% else %}
