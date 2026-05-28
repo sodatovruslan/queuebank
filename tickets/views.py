@@ -93,4 +93,14 @@ def cancel_ticket(request, pk):
         ticket.status = 'cancelled'
         ticket.save()
     return redirect('my_ticket')
+
+
+
+@login_required
+@permission_required('tickets.view_ticket', raise_exception=True)
+def ticket_history(request):
+    tickets = Ticket.objects.filter(
+        client=request.user
+    ).order_by('-created_at')
+    return render(request, 'tickets/history.html', {'tickets': tickets})
 # Create your views here.
