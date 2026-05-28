@@ -1,18 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container">
+    <div class="card">
+        <h2>🤖 AI Assistant</h2>
+        <p>Ask me anything about our bank services!</p>
+        <br>
+        <form method="GET">
+            <input type="text" name="prompt" value="{{ prompt }}" placeholder="Ask me something...">
+            <button type="submit" class="btn">Ask AI</button>
+        </form>
+    </div>
 
-<h2>AI Assistant</h2>
-<p>Ask me anything about our bank services!</p>
+    {% if answer %}
+    <div class="card">
+        <h3>Answer:</h3>
+        <br>
+        <p>{{ answer }}</p>
+    </div>
+    {% endif %}
 
-<form method="GET">
-    <input type="text" name="prompt" value="{{ prompt }}" placeholder="Ask me something...">
-    <button type="submit">Ask</button>
-</form>
-
-{% if answer %}
-    <h3>Answer:</h3>
-    <p>{{ answer }}</p>
-{% endif %}
-
+    <div class="card">
+        <h3>Our Services</h3>
+        <div class="services">
+            {% for service in services %}
+            <div class="service-card">
+                <div class="service-code">{{ service.code }}</div>
+                <h3>{{ service.name }}</h3>
+                <p>{{ service.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock %}
