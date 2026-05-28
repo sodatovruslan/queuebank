@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>👑 Admin Dashboard</h2>
+    <br>
+
+    <div class="services">
+        <div class="service-card">
+            <div class="service-code">{{ total_today }}</div>
+            <h3>Served Today</h3>
+            <p>Total clients served</p>
+        </div>
+        <div class="service-card">
+            <div class="service-code">{{ waiting }}</div>
+            <h3>Waiting</h3>
+            <p>Clients in queue</p>
+        </div>
+        <div class="service-card">
+            <div class="service-code">{{ called }}</div>
+            <h3>Called</h3>
+            <p>Clients being served</p>
+        </div>
+        <div class="service-card">
+            <div class="service-code">{{ cancelled }}</div>
+            <h3>Cancelled</h3>
+            <p>Cancelled tickets</p>
+        </div>
+        <div class="service-card">
+            <div class="service-code">{{ open_windows }}</div>
+            <h3>Open Windows</h3>
+            <p>Active windows</p>
+        </div>
+    </div>
+
+    <br>
+    <div class="card">
+        <h3>Active Services</h3>
+        <br>
+        {% for service in services %}
+        <div class="queue-item">
+            <span class="service-code" style="font-size:20px">{{ service.code }}</span>
+            <span>{{ service.name }}</span>
+            <span>{{ service.description }}</span>
+        </div>
+        {% endfor %}
+    </div>
+    <meta http-equiv="refresh" content="10">
+</div>
+{% endblock %}
