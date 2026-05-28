@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>🎟️ Ticket History</h2>
+    <br>
+    {% if tickets %}
+    <div class="card">
+        {% for ticket in tickets %}
+        <div class="queue-item">
+            <span style="font-size:20px;font-weight:700;color:#2563eb;">{{ ticket.number }}</span>
+            <span>{{ ticket.service.name }}</span>
+            <span class="status-{{ ticket.status }}">{{ ticket.get_status_display }}</span>
+            <span>{{ ticket.created_at|date:"d.m.Y H:i" }}</span>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card">
+        <h3>No tickets yet!</h3>
+        <br>
+        <a href="{% url 'home' %}" class="btn">Take a ticket</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
