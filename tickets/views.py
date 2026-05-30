@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required,permission_required
-from .models import Service, Ticket, Window
+from .models import Service, Ticket, Window,Message
 from groq import Groq
 
 GROQ_API_KEY = ''
@@ -96,4 +96,23 @@ def ticket_history(request):
         client=request.user
     ).order_by('-created_at')
     return render(request, 'tickets/history.html', {'tickets': tickets})
+
+
+@login_required
+@permission_required('tickets.view_ticket', raise_exception=True)
+def chat(request, pk):
+    ticket = Ticket.objects.get(pk=pk)
+    messages = ticket.messages.all().order_by('created_at')
+    if request.method == 'POST':
+        text = request.POST.get('text')
+        if text:
+            Message.objects.create(
+                ticket=ticket,
+                sender=request.user,
+                text=text
+            )
+        return redirect('chat', pk=pk)
+    return render(request, 'tickets/chat.html', {
+        'ticket': ticket,
+        'messages': messages,})
 # Create your views here.
