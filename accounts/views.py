@@ -21,8 +21,9 @@ def send_confirmation_email(user):
 
 
 def register(request):
-    form = RegisterForm(request.POST or None)
+    form = RegisterForm()
     if request.method == 'POST':
+        form = RegisterForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
             email = form.cleaned_data['email']
@@ -44,11 +45,10 @@ def register(request):
     return render(request, 'accounts/register.html', {'form': form})
 
 
-
-
 def login_view(request):
-    form = LoginForm(request.POST or None)
+    form = LoginForm()
     if request.method == 'POST':
+        form = LoginForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
@@ -69,10 +69,10 @@ def logout_view(request):
     return redirect('login')
 
 
-
 def confirm_email(request):
-    form = ConfirmEmailForm(request.POST or None)
+    form = ConfirmEmailForm()
     if request.method == 'POST':
+        form = ConfirmEmailForm(request.POST)
         if form.is_valid():
             username = request.POST.get('username').strip()
             code = form.cleaned_data['code'].strip()
@@ -90,8 +90,9 @@ def confirm_email(request):
 
 
 def forgot_password(request):
-    form = ForgotPasswordForm(request.POST or None)
+    form = ForgotPasswordForm()
     if request.method == 'POST':
+        form = ForgotPasswordForm(request.POST)
         if form.is_valid():
             email = form.cleaned_data['email'].strip()
             user = User.objects.filter(email=email).first()
@@ -103,8 +104,9 @@ def forgot_password(request):
 
 
 def reset_confirm(request):
-    form = ResetConfirmForm(request.POST or None)
+    form = ResetConfirmForm()
     if request.method == 'POST':
+        form = ResetConfirmForm(request.POST)
         if form.is_valid():
             code = form.cleaned_data['code'].strip()
             new_password = form.cleaned_data['new_password']

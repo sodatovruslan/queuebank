@@ -11,7 +11,7 @@
         <form method="POST" action="{% url 'confirm_email' %}">
             {% csrf_token %}
             <input type="hidden" name="username" value="{{ username }}">
-            {{ form.as_p }}
+            {{form}}
             <button type="submit" class="btn">Confirm</button>
         </form>
     </div>
