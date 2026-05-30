@@ -47,20 +47,21 @@ def register(request):
 
 
 def login_view(request):
+    form = LoginForm(request.POST or None)
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if not user:
-            not_active = User.objects.filter(username=username, is_active=False).first()
-            if not_active:
-                return render(request, 'accounts/login.html', {'error': 'Go and confirm your email'})
-            else:
-                return render(request, 'accounts/login.html', {'error': 'Wrong password or username'})
-        else:
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if not user:
+                not_active = User.objects.filter(username=username, is_active=False).first()
+                if not_active:
+                    return render(request, 'accounts/login.html', {'form': form, 'error': 'Go and confirm your email'})
+                else:
+                    return render(request, 'accounts/login.html', {'form': form, 'error': 'Wrong password or username'})
             login(request, user)
             return redirect('home')
-    return render(request, 'accounts/login.html')
+    return render(request, 'accounts/login.html', {'form': form})
 
 
 def logout_view(request):
