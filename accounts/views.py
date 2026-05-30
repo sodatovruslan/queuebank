@@ -71,20 +71,22 @@ def logout_view(request):
 
 
 def confirm_email(request):
+    form = ConfirmEmailForm(request.POST or None)
     if request.method == 'POST':
-        username = request.POST.get('username').strip()
-        code = request.POST.get('code').strip()
-        user = User.objects.filter(username=username).first()
-        if not user:
-            return render(request, 'accounts/confirm_email.html', {'error': 'Invalid username'})
-        confirm = EmailConfirm.objects.filter(user=user, code=code).first()
-        if not confirm:
-            return render(request, 'accounts/confirm_email.html', {'error': 'Wrong code'})
-        user.is_active = True
-        user.save()
-        confirm.delete()
-        return redirect('login')
-    return render(request, 'accounts/confirm_email.html')
+        if form.is_valid():
+            username = request.POST.get('username').strip()
+            code = form.cleaned_data['code'].strip()
+            user = User.objects.filter(username=username).first()
+            if not user:
+                return render(request, 'accounts/confirm_email.html', {'form': form, 'error': 'Invalid username'})
+            confirm = EmailConfirm.objects.filter(user=user, code=code).first()
+            if not confirm:
+                return render(request, 'accounts/confirm_email.html', {'form': form, 'error': 'Wrong code'})
+            user.is_active = True
+            user.save()
+            confirm.delete()
+            return redirect('login')
+    return render(request, 'accounts/confirm_email.html', {'form': form})
 
 
 
