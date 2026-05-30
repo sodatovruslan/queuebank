@@ -29,3 +29,8 @@ class ConfirmEmailForm(forms.Form):
         max_length=6,
         widget=forms.TextInput(attrs={'placeholder': 'Enter your code'})
     )
+    
+class ForgotPasswordForm(forms.Form):
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'placeholder': 'Enter your email'})
+    )
