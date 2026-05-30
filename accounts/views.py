@@ -89,16 +89,17 @@ def confirm_email(request):
     return render(request, 'accounts/confirm_email.html', {'form': form})
 
 
-
 def forgot_password(request):
+    form = ForgotPasswordForm(request.POST or None)
     if request.method == 'POST':
-        email = request.POST.get('email').strip()
-        user = User.objects.filter(email=email).first()
-        if not user:
-            return render(request, 'accounts/forgot_password.html', {'error': 'Email not found'})
-        send_confirmation_email(user)
-        return redirect('reset_confirm')
-    return render(request, 'accounts/forgot_password.html')
+        if form.is_valid():
+            email = form.cleaned_data['email'].strip()
+            user = User.objects.filter(email=email).first()
+            if not user:
+                return render(request, 'accounts/forgot_password.html', {'form': form, 'error': 'Email not found'})
+            send_confirmation_email(user)
+            return redirect('reset_confirm')
+    return render(request, 'accounts/forgot_password.html', {'form': form})
 
 
 def reset_confirm(request):
