@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <h2>💬 Chat — Ticket {{ ticket.number }}</h2>
+        <p>Service: {{ ticket.service.name }}</p>
+        <p class="status-{{ ticket.status }}">Status: {{ ticket.get_status_display }}</p>
+    </div>
+
+    <div class="card" style="height:400px;overflow-y:auto;">
+        {% for message in messages %}
+            {% if message.sender == request.user %}
+                <div style="text-align:right;margin-bottom:12px;">
+                    <span style="background:#2563eb;color:white;padding:8px 14px;border-radius:12px;display:inline-block;">
+                        {{ message.text }}
+                    </span>
+                    <p style="font-size:11px;color:#94a3b8;">{{ message.sender.username }} • {{ message.created_at|date:"H:i" }}</p>
+                </div>
+            {% else %}
+                <div style="text-align:left;margin-bottom:12px;">
+                    <span style="background:#1e293b;color:white;padding:8px 14px;border-radius:12px;display:inline-block;border:1px solid #334155;">
+                        {{ message.text }}
+                    </span>
+                    <p style="font-size:11px;color:#94a3b8;">{{ message.sender.username }} • {{ message.created_at|date:"H:i" }}</p>
+                </div>
+            {% endif %}
+        {% empty %}
+            <p style="text-align:center;color:#94a3b8;">No messages yet!</p>
+        {% endfor %}
+    </div>
+
+    <div class="card">
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="text" placeholder="Type your message...">
+            <button type="submit"
