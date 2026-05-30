@@ -5,7 +5,7 @@ from random import randint
 from django.core.mail import send_mail
 from .models import EmailConfirm, Client
 from django.conf import settings
-
+from .forms import RegisterForm, LoginForm, ConfirmEmailForm, ForgotPasswordForm, ResetConfirmForm
 def send_confirmation_email(user):
     code = randint(100000, 999999)
     EmailConfirm.objects.update_or_create(user=user, defaults={'code': code})
@@ -18,29 +18,30 @@ def send_confirmation_email(user):
     except Exception as e:
         print(e, 'error')
 
+
+
 def register(request):
+    form = RegisterForm(request.POST or None)
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        email = request.POST.get('email')
-        if password1 != password2:
-            return render(request, 'accounts/register.html', {'error': 'Password dont match'})
-        elif User.objects.filter(username=username, is_active=True).exists():
-            return render(request, 'accounts/register.html', {'error': 'User already exist'})
-        elif User.objects.filter(email=email, is_active=True).exists():
-            return render(request, 'accounts/register.html', {'error': 'Email already exist'})
-        
-        # Удаляем старого неактивного юзера если есть
-        User.objects.filter(username=username, is_active=False).delete()
-        
-        user = User.objects.create_user(username=username, email=email, password=password1)
-        user.is_active = False
-        user.save()
-        Client.objects.create(user=user, full_name=username, phone='')
-        send_confirmation_email(user)
-        return render(request, 'accounts/confirm_email.html', {'username': user.username})
-    return render(request, 'accounts/register.html')
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            email = form.cleaned_data['email']
+            password1 = form.cleaned_data['password1']
+            password2 = form.cleaned_data['password2']
+            if password1 != password2:
+                return render(request, 'accounts/register.html', {'form': form, 'error': 'Password dont match'})
+            elif User.objects.filter(username=username, is_active=True).exists():
+                return render(request, 'accounts/register.html', {'form': form, 'error': 'User already exist'})
+            elif User.objects.filter(email=email, is_active=True).exists():
+                return render(request, 'accounts/register.html', {'form': form, 'error': 'Email already exist'})
+            User.objects.filter(username=username, is_active=False).delete()
+            user = User.objects.create_user(username=username, email=email, password=password1)
+            user.is_active = False
+            user.save()
+            Client.objects.create(user=user, full_name=username, phone='')
+            send_confirmation_email(user)
+            return render(request, 'accounts/confirm_email.html', {'username': user.username})
+    return render(request, 'accounts/register.html', {'form': form})
 
 
 
