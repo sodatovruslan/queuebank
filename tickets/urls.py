@@ -8,4 +8,5 @@ urlpatterns = [
     path('cancel/<int:pk>/', views.cancel_ticket, name='cancel_ticket'),
     path('history/', views.ticket_history, name='ticket_history'),
     path('ai-help/', views.ai_help, name='ai_help'),
+	path('chat/<int:pk>/', views.chat, name='chat'),
 ]
