@@ -23,3 +23,9 @@ class LoginForm(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={'placeholder': 'Password'})
     )
+    
+class ConfirmEmailForm(forms.Form):
+    code = forms.CharField(
+        max_length=6,
+        widget=forms.TextInput(attrs={'placeholder': 'Enter your code'})
+    )
