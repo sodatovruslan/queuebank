@@ -129,5 +129,9 @@ EMAIL_HOST_USER = 'sodatovruslan14@gmail.com'
 EMAIL_HOST_PASSWORD = 'pbij yitr xydc mowc'
 DEFAULT_FROM_EMAIL = 'sodatovruslan14@gmail.com'
 
+AUTHENTICATION_BACKENDS = [
+    'accounts.backends.EmailOrUsernameBackend',
+]
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']

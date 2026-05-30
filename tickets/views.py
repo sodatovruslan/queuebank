@@ -1,12 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required,permission_required
 from .models import Service, Ticket, Window
-
-
 from groq import Groq
 
 GROQ_API_KEY = ''
-
 def ai_help(request):
     client = Groq(api_key=GROQ_API_KEY)
     prompt = request.GET.get('prompt', '').strip()
@@ -51,7 +48,6 @@ def home(request):
     services = Service.objects.filter(is_active=True)
     return render(request, 'tickets/home.html', {'services': services})
 
-
 @login_required
 @permission_required('tickets.add_ticket', raise_exception=True)
 def take_ticket(request, pk):
@@ -70,10 +66,7 @@ def take_ticket(request, pk):
 @login_required
 @permission_required('tickets.view_ticket', raise_exception=True)
 def my_ticket(request):
-    ticket = Ticket.objects.filter(
-        client=request.user
-    ).last()
-
+    ticket = Ticket.objects.filter( client=request.user).last()
     position = Ticket.objects.filter(
         service=ticket.service,
         status='waiting'
