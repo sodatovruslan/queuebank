@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <div class="container">
     <h2>Operator Panel</h2>
@@ -14,13 +13,14 @@
         {% endif %}
     </form>
     <br>
-
     <div class="current-client">
         <h3>Current Client</h3>
         {% if current_ticket %}
             <div class="current-number">{{ current_ticket.number }}</div>
             <p>Service: {{ current_ticket.service.name }}</p>
             <br>
+            <a href="{% url 'chat' current_ticket.pk %}" class="btn">💬 Chat</a>
+            <br><br>
             <form method="POST" action="{% url 'done_ticket' current_ticket.pk %}" style="display:inline">
                 {% csrf_token %}
                 <button class="btn btn-done">✅ Done</button>
@@ -40,6 +40,7 @@
             <div class="queue-item">
                 <span>{{ ticket.number }}</span>
                 <span>{{ ticket.service.name }}</span>
+                <a href="{% url 'chat' ticket.pk %}" class="btn" style="padding:4px 10px;font-size:12px;">💬</a>
             </div>
         {% empty %}
             <p>Queue is empty</p>
