@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <div class="container">
     <div class="card" style="max-width:400px;margin:0 auto;">
@@ -8,11 +7,9 @@
         {% if error %}
             <div class="error">{{ error }}</div>
         {% endif %}
-
         <form method="POST">
             {% csrf_token %}
-            <input type="text" name="username" placeholder="Username">
-            <input type="password" name="password" placeholder="Password">
+            {{ form.as_p }}
             <button type="submit" class="btn">Login</button>
         </form>
         <br>
