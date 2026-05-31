@@ -4,6 +4,8 @@
 <div class="container">
     <h2>👑 Admin Dashboard</h2>
     <br>
+    <a href="{% url 'create_operator' %}" class="btn">➕ Create Operator</a>
+    <br><br>
 
     <div class="services">
         <div class="service-card">
@@ -45,6 +47,7 @@
         </div>
         {% endfor %}
     </div>
+
     <meta http-equiv="refresh" content="10">
 </div>
 {% endblock %}
