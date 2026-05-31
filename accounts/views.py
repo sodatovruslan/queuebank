@@ -6,6 +6,7 @@ from django.core.mail import send_mail
 from .models import EmailConfirm, Client
 from django.conf import settings
 from .forms import RegisterForm, LoginForm, ConfirmEmailForm, ForgotPasswordForm, ResetConfirmForm
+
 def send_confirmation_email(user):
     code = randint(100000, 999999)
     EmailConfirm.objects.update_or_create(user=user, defaults={'code': code})
@@ -17,8 +18,6 @@ def send_confirmation_email(user):
             recipient_list=[user.email])
     except Exception as e:
         print(e, 'error')
-
-
 
 def register(request):
     form = RegisterForm()

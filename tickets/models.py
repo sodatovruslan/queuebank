@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from operators.models import Operator
+
 class Service(models.Model):
     name=models.CharField(max_length=100)
     code=models.CharField(max_length=5)
@@ -31,7 +32,6 @@ class Ticket(models.Model):
         ('done',      'Обслужен'),
         ('cancelled', 'Отменён'),
     ]
-
     number=models.CharField(max_length=10)
     status=models.CharField(max_length=20, choices=STATUS, default='waiting')
     created_at=models.DateTimeField(auto_now_add=True)

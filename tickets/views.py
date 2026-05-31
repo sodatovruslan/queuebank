@@ -9,7 +9,6 @@ def ai_help(request):
     prompt = request.GET.get('prompt', '').strip()
     
     services = Service.objects.filter(is_active=True)
-    
     services_for_ai = []
     for service in services:
         services_for_ai.append({
@@ -25,22 +24,32 @@ def ai_help(request):
     Answer in the same language the user writes in.
     """
     
+   
+    history = request.session.get('ai_history', [])
+    
     answer = ''
     if prompt:
-        response = client.chat.completions.create(
-    messages=[
-        {"role": "system", "content": PROMPT_FOR_AI},
-        {"role": "user", "content": prompt}
-    ],
-    model="llama-3.3-70b-versatile",
-)
+        history.append({"role": "user", "content": prompt})
         
+        response = client.chat.completions.create(
+            messages=[
+                {"role": "system", "content": PROMPT_FOR_AI},
+            ] + history,
+            model="llama-3.3-70b-versatile",
+        )
         answer = response.choices[0].message.content
+        
+        
+        history.append({"role": "assistant", "content": answer})
+        
+       
+        request.session['ai_history'] = history
     
     return render(request, 'tickets/ai_help.html', {
         'answer': answer,
         'prompt': prompt,
         'services': services,
+        'history': history,
     })
 
 

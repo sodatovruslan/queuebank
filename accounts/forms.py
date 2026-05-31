@@ -38,8 +38,6 @@ class ForgotPasswordForm(forms.Form):
 class ResetConfirmForm(forms.Form):
     code = forms.CharField(
         max_length=6,
-        widget=forms.TextInput(attrs={'placeholder': 'Enter your code'})
-    )
+        widget=forms.TextInput(attrs={'placeholder': 'Enter your code'}))
     new_password = forms.CharField(
-        widget=forms.PasswordInput(attrs={'placeholder': 'New Password'})
-    )
+    widget=forms.PasswordInput(attrs={'placeholder': 'New Password'}))
