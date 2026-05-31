@@ -9,4 +9,5 @@ urlpatterns = [
     path('history/', views.ticket_history, name='ticket_history'),
     path('ai-help/', views.ai_help, name='ai_help'),
 	path('chat/<int:pk>/', views.chat, name='chat'),
+	path('ai-clear/', views.ai_clear, name='ai_clear'),
 ]

@@ -1,24 +1,40 @@
 {% extends 'base.html' %}
-
 {% block content %}
 <div class="container">
     <div class="card">
         <h2>🤖 AI Assistant</h2>
         <p>Ask me anything about our bank services!</p>
-        <br>
-        <form method="GET">
-            <input type="text" name="prompt" value="{{ prompt }}" placeholder="Ask me something...">
-            <button type="submit" class="btn">Ask AI</button>
-        </form>
+    </div>
+    <div class="card" style="height:400px;overflow-y:auto;">
+        {% for message in history %}
+            {% if message.role == 'user' %}
+                <div style="text-align:right;margin-bottom:12px;">
+                    <span style="background:#2563eb;color:white;padding:8px 14px;border-radius:12px;display:inline-block;">
+                        {{ message.content }}
+                    </span>
+                    <p style="font-size:11px;color:#94a3b8;">You</p>
+                </div>
+            {% else %}
+                <div style="text-align:left;margin-bottom:12px;">
+                    <span style="background:#1e293b;color:white;padding:8px 14px;border-radius:12px;display:inline-block;border:1px solid #334155;">
+                        {{ message.content }}
+                    </span>
+                    <p style="font-size:11px;color:#94a3b8;">AI Assistant</p>
+                </div>
+            {% endif %}
+        {% empty %}
+            <p style="text-align:center;color:#94a3b8;">Ask me something!</p>
+        {% endfor %}
     </div>
 
-    {% if answer %}
     <div class="card">
-        <h3>Answer:</h3>
+        <form method="GET">
+            <input type="text" name="prompt" placeholder="Type your question...">
+            <button type="submit" class="btn">Ask AI 🤖</button>
+        </form>
         <br>
-        <p>{{ answer }}</p>
+        <a href="{% url 'ai_clear' %}" class="btn btn-skip">🗑️ Clear History</a>
     </div>
-    {% endif %}
 
     <div class="card">
         <h3>Our Services</h3>

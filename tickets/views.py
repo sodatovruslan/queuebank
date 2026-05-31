@@ -54,7 +54,7 @@ def ai_help(request):
 
 
 def home(request):
-    services = Service.objects.filter(is_active=True)
+    services=Service.objects.filter(is_active=True)
     return render(request, 'tickets/home.html', {'services': services})
 
 @login_required
@@ -124,4 +124,8 @@ def chat(request, pk):
     return render(request, 'tickets/chat.html', {
         'ticket': ticket,
         'messages': messages,})
+
+def ai_clear(request):
+    request.session['ai_history'] = []
+    return redirect('ai_help')
 # Create your views here.
